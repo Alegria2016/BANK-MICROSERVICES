@@ -53,10 +53,10 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 	*  Al realizar un movimiento se debe actualizar el saldo disponible.
 	*  Se debe llevar el registro de las transacciones realizadas.
 
-### F1:
+### F3:
    
-   Generecion de CRUD (Crear, leer, actualizar y eliminar) en Entidades: Cliente.
-	Generacion de CRUD (Crear, leer, actualizar y eliminar) Endidades: Cuenta y Movimiento.
+    *  Registro de movimientos: Al realizar un movimiento el cual no cuente con saldo, debe alertar mediante el siguiente mensaje "Saldo no disponible"
+	*  Defina segun su expertise, la mejor manera de capturar y mostrar el error.
 
 
 
