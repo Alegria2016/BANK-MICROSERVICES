@@ -43,6 +43,18 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 
 ### F1:
    
+    *  Generecion de CRUD (Crear, leer, actualizar y eliminar) en Entidades: Cliente.
+    *  Generacion de CRUD (Crear, leer, actualizar y eliminar) Endidades: Cuenta y Movimiento.
+
+### F2:
+   
+    *  Registro de movimientos: al registrar un movimiento en la cuenta debe tener en cuenta lo siguiente:
+	   Para un movimiento se puede tener valores positivos o negativos.
+	*  Al realizar un movimiento se debe actualizar el saldo disponible.
+	*  Se debe llevar el registro de las transacciones realizadas.
+
+### F1:
+   
    Generecion de CRUD (Crear, leer, actualizar y eliminar) en Entidades: Cliente.
 	Generacion de CRUD (Crear, leer, actualizar y eliminar) Endidades: Cuenta y Movimiento.
 
