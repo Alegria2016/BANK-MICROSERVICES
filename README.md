@@ -38,6 +38,16 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 *   **Dependencias:**
     *   MySQL (`mysql-client`)
 
+
+## Funcionalidades
+
+### F1:
+   
+   Generecion de CRUD (Crear, leer, actualizar y eliminar) en Entidades: Cliente.
+	Generacion de CRUD (Crear, leer, actualizar y eliminar) Endidades: Cuenta y Movimiento.
+
+
+
 ## Diagramas de la Base de Datos
 
 ### Estructura de la Base de Datos
