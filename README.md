@@ -38,6 +38,17 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 *   **Dependencias:**
     *   MySQL (`mysql-client`)
 
+## Diagramas de la Base de Datos
+
+### Estructura de la Base de Datos
+
+
+### Modelo Entidad Relación (ERD)
+
+Aunque los proyectos están separados y no tiene una relación directa entre las tablas de los dos proyectos, se muestra a continuación la relación lógica da la tabla clientes del proyecto client-service y las dos tablas cuentas y movimientos del servicio account-service, la cual consiste en que un cliente puede tener muchas cuentas y una cuenta puede tener muchos movimientos.
+
+<img width="839" height="449" alt="image" src="https://github.com/user-attachments/assets/a4d67f32-9327-4c17-ae14-b2fb23cbcf71" />
+
 
 ## Funcionalidades
 
@@ -59,20 +70,28 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 	   mensaje "Saldo no disponible"
 	*  Defina segun su expertise, la mejor manera de capturar y mostrar el error.
 
+### F4:
 
+	*  Reportes: Generar un reporte de "Estado de cuenta" especificando un rango de fechas y cliente.
+	   Este reporte debe contener:
+	   Cuenta asociada con su respectivos saldos.
+	   Detalle de movimientos de las cuentas.
+	   el endpoint que se debe utilizar para esto debe ser el siguiente:
+	   /reportes?fecha=rango fechas & cliente
+	   El servicio del reporte debe retornar la informacion en formato JSON.
+	   Defina, segun su expertise, la mejor manera de solictar retornar esta informacion.
 
-## Diagramas de la Base de Datos
+### F5:
 
-### Estructura de la Base de Datos
+	*  Preubas unitarias: Implementar 1 prueba unitaria para la entidad de dominio Cliente.
 
+### F6:
 
-### Modelo Entidad Relación (ERD)
+	*  Pruebas de integracion: Implentar 1 prueba de integracion.
 
-Aunque los proyectos están separados y no tiene una relación directa entre las tablas de los dos proyectos, se muestra a continuación la relación lógica da la tabla clientes del proyecto client-service y las dos tablas cuentas y movimientos del servicio account-service, la cual consiste en que un cliente puede tener muchas cuentas y una cuenta puede tener muchos movimientos.
+### F7:
 
-<img width="839" height="449" alt="image" src="https://github.com/user-attachments/assets/a4d67f32-9327-4c17-ae14-b2fb23cbcf71" />
-
-
+	*  Despliegue la solucion en contenedores Docker.
 
 
 ## Requisitos
