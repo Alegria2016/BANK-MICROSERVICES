@@ -6,6 +6,17 @@ Este proyecto consiste en una arquitectura de microservicios para un sistema ban
 
 El objetivo de este proyecto es demostrar una implementación de microservicios utilizando Docker y Compose para facilitar el despliegue y la gestión de los servicios.
 
+## Diagramas de la Base de Datos
+
+### Estructura de la Base de Datos
+
+
+### Modelo Entidad Relación (ERD)
+
+Aunque los proyectos están separados y no tiene una relación directa entre las tablas de los dos proyectos, se muestra a continuación la relación lógica da la tabla clientes del proyecto client-service y las dos tablas cuentas y movimientos del servicio account-service, la cual consiste en que un cliente puede tener muchas cuentas y una cuenta puede tener muchos movimientos.
+
+<img width="839" height="449" alt="image" src="https://github.com/user-attachments/assets/a4d67f32-9327-4c17-ae14-b2fb23cbcf71" />
+
 ## Servicios
 
 ### Account Service
@@ -37,17 +48,6 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 *   **Puerto:** 8082 (ver `health-check.sh`)
 *   **Dependencias:**
     *   MySQL (`mysql-client`)
-
-## Diagramas de la Base de Datos
-
-### Estructura de la Base de Datos
-
-
-### Modelo Entidad Relación (ERD)
-
-Aunque los proyectos están separados y no tiene una relación directa entre las tablas de los dos proyectos, se muestra a continuación la relación lógica da la tabla clientes del proyecto client-service y las dos tablas cuentas y movimientos del servicio account-service, la cual consiste en que un cliente puede tener muchas cuentas y una cuenta puede tener muchos movimientos.
-
-<img width="839" height="449" alt="image" src="https://github.com/user-attachments/assets/a4d67f32-9327-4c17-ae14-b2fb23cbcf71" />
 
 
 ## Funcionalidades
