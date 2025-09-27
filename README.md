@@ -153,7 +153,7 @@ La configuración de las bases de datos MySQL se encuentra en el archivo [docker
 
 ## Verificación de Salud
 
-Una vez realizado el despliegue verifica documentacion técnica de OpenApi de los servicios en: http://localhost:8081/api/swagger-ui/index.html y http://localhost:8082/api/swagger-ui/index.html o ejecútelo el comando a continuación para confirmar que todos los servicios están en funcionamiento:
+Una vez realizado el despliegue verifica documentación técnica de OpenApi de los servicios en: http://localhost:8081/api/swagger-ui/index.html y http://localhost:8082/api/swagger-ui/index.html o ejecútelo el comando a continuación para confirmar que todos los servicios están en funcionamiento:
 
 ```bash
 ./health-check.sh
