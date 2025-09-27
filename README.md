@@ -40,12 +40,13 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 
 ## Diagramas de la Base de Datos
 
-### Account Service - Estructura de la Base de Datos
+### Estructura de la Base de Datos
 
 
 ### Modelo Entidad Relación (ERD)
 
-<img width="766" height="446" alt="image" src="https://github.com/user-attachments/assets/bc3eaafe-e61c-409b-82b8-73f6d72ce29b" />
+<img width="839" height="449" alt="image" src="https://github.com/user-attachments/assets/a4d67f32-9327-4c17-ae14-b2fb23cbcf71" />
+
 
 
 
