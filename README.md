@@ -54,8 +54,8 @@ Aunque los proyectos están separados y no tiene una relación directa entre las
 
 ### F1:
    
-    *  Generecion de CRUD (Crear, leer, actualizar y eliminar) en Entidades: Cliente.
-    *  Generacion de CRUD (Crear, leer, actualizar y eliminar) Endidades: Cuenta y Movimiento.
+    *  Genereción de CRUD (Crear, leer, actualizar y eliminar) en Entidades: Cliente.
+    *  Generación de CRUD (Crear, leer, actualizar y eliminar) Entidades: Cuenta y Movimiento.
 
 ### F2:
    
@@ -68,7 +68,7 @@ Aunque los proyectos están separados y no tiene una relación directa entre las
    
     *  Registro de movimientos: Al realizar un movimiento el cual no cuente con saldo, debe alertar mediante el siguiente 
 	   mensaje "Saldo no disponible"
-	*  Defina segun su expertise, la mejor manera de capturar y mostrar el error.
+	*  Defina según su expertise, la mejor manera de capturar y mostrar el error.
 
 ### F4:
 
@@ -83,15 +83,15 @@ Aunque los proyectos están separados y no tiene una relación directa entre las
 
 ### F5:
 
-	*  Preubas unitarias: Implementar 1 prueba unitaria para la entidad de dominio Cliente.
+	*  Pruebas unitarias: Implementar 1 prueba unitaria para la entidad de dominio Cliente.
 
 ### F6:
 
-	*  Pruebas de integracion: Implentar 1 prueba de integracion.
+	*  Pruebas de integración: Implementar 1 prueba de integración.
 
 ### F7:
 
-	*  Despliegue la solucion en contenedores Docker.
+	*  Despliegue la solución en contenedores Docker.
 
 
 ## Requisitos
