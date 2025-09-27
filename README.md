@@ -56,6 +56,8 @@ Aunque los proyectos estan separados y no tiene una recion directa entre las tab
 
 *   Docker
 *   Docker Compose
+*   RabbitMQ
+*   MySQL
 
 ## Despliegue
 
