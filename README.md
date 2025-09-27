@@ -15,9 +15,11 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
     *   Java
     *   Spring Boot
     *   MySQL
+    *   RabbitMQ
     *   Maven
+    *   OpenApi (Swagger)
     *   Docker
-*   **Puerto:** 8082 (ver `health-check.sh`)
+*   **Puerto:** 8081 (ver `health-check.sh`)
 *   **Dependencias:**
     *   MySQL (`mysql-account`)
 
@@ -28,9 +30,11 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
     *   Java
     *   Spring Boot
     *   MySQL
+    *   RabbitMQ
     *   Maven
+    *   OpenApi (Swagger)
     *   Docker
-*   **Puerto:** 8081 (ver `health-check.sh`)
+*   **Puerto:** 8082 (ver `health-check.sh`)
 *   **Dependencias:**
     *   MySQL (`mysql-client`)
 
