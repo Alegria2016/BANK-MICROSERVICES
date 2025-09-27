@@ -50,7 +50,7 @@ El despliegue se realiza mediante Docker Compose. Siga estos pasos:
 1.  Clonar el repositorio:
 
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
+    git clone https://github.com/Alegria2016/BANK-MICROSERVICES
     cd bank-microservices
     ```
 
