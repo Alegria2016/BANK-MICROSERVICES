@@ -1,0 +1,95 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: account-service
+  profiles:
+    active: default
+  datasource:
+    url: jdbc:mysql://localhost:3306/account_db
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 300000
+      connection-timeout: 20000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 20
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10000
+    template:
+      retry:
+        enabled: true
+        initial-interval: 2000
+        max-attempts: 3
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+        auto-startup: true
+
+app:
+  events:
+    enabled: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10000
+    template:
+      retry:
+        enabled: true
+        initial-interval: 2000
+        max-attempts: 3
+    exchange:
+      cliente-events: "cliente.events"
+    queue:
+      cliente-creado: "cliente.creado.queue"
+    routing-key:
+      cliente-creado: "cliente.creado"
+  cuenta:
+    defecto:
+      saldo-inicial: 50.00
+      tipo: AHORROS
+      habilitada: true
+  security:
+    jwt:
+      secret: "account-service-secret-key"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+
+logging:
+  level:
+    com.bank.account_service: INFO
+    org.springframework: INFO
+    org.hibernate: WARN
+  file:
+    name: /var/log/account-service/app.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

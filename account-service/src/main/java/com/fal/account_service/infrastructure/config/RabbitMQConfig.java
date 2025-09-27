@@ -1,0 +1,58 @@
+package com.fal.account_service.infrastructure.config;
+
+
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class RabbitMQConfig {
+
+    @Value("${app.rabbitmq.exchange.cliente-events:cliente.events}")
+    private String exchangeName;
+
+    @Value("${app.rabbitmq.queue.cliente-creado:cliente.creado.queue}")
+    private String queueName;
+
+    @Value("${app.rabbitmq.routing-key.cliente-creado:cliente.creado}")
+    private String routingKey;
+
+    // Exchange para eventos de cliente (mismo que en client_service)
+    @Bean
+    public TopicExchange clienteEventsExchange() {
+        return new TopicExchange(exchangeName);
+    }
+
+    // Queue para eventos de creación de cliente (mismo nombre)
+    @Bean
+    public Queue clienteCreadoQueue() {
+        return new Queue(queueName, true, false, false);
+    }
+
+    // Binding entre exchange y queue (misma configuración)
+    @Bean
+    public Binding clienteCreadoBinding() {
+        return BindingBuilder.bind(clienteCreadoQueue())
+                .to(clienteEventsExchange())
+                .with(routingKey);
+    }
+
+    // Configuración para JSON
+    @Bean
+    public MessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
+    // RabbitTemplate configurado
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        return rabbitTemplate;
+    }
+}

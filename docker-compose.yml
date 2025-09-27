@@ -1,0 +1,97 @@
+# REMOVER la línea version: '3.8' (ya es obsoleta)
+
+services:
+  mysql-account:
+    image: mysql:8.0.33
+    container_name: mysql-account
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: account_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_account_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      timeout: 30s
+      retries: 5
+      start_period: 40s
+
+  mysql-client:
+    image: mysql:8.0.33
+    container_name: mysql-client  
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: client_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_client_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      timeout: 30s
+      retries: 5
+      start_period: 40s
+
+  account-service:
+    build: 
+      context: ./account-service
+      dockerfile: Dockerfile
+    container_name: account-service
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-account:3306/account_db
+      SPRING_DATASOURCE_USERNAME: app_user
+      SPRING_DATASOURCE_PASSWORD: userpassword
+    depends_on:
+      mysql-account:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8081 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  client-service:
+    build:
+      context: ./client-service  
+      dockerfile: Dockerfile
+    container_name: client-service
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-client:3306/client_db
+      SPRING_DATASOURCE_USERNAME: app_user
+      SPRING_DATASOURCE_PASSWORD: userpassword
+    depends_on:
+      mysql-client:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8082 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  mysql_account_data:
+    driver: local
+  mysql_client_data:
+    driver: local
+
+networks:
+  default:
+    name: bank-microservices-network
+    driver: bridge
