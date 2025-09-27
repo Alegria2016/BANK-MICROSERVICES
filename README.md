@@ -38,6 +38,26 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 *   **Dependencias:**
     *   MySQL (`mysql-client`)
 
+## Diagramas de la Base de Datos
+
+### Account Service - Estructura de la Base de Datos
+
+![Diagrama de la Estructura de la Base de Datos de Account Service](images/account-service-db-structure.png)
+
+### Account Service - Modelo Entidad Relación (ERD)
+
+![Diagrama ERD de Account Service](images/account-service-erd.png)
+
+### Client Service - Estructura de la Base de Datos
+
+![Diagrama de la Estructura de la Base de Datos de Client Service](images/client-service-db-structure.png)
+
+### Client Service - Modelo Entidad Relación (ERD)
+
+![Diagrama ERD de Client Service](images/client-service-erd.png)
+
+
+
 ## Requisitos
 
 *   Docker
