@@ -94,6 +94,10 @@ Aunque los proyectos están separados y no tiene una relación directa entre las
 	*  Despliegue la solución en contenedores Docker.
 
 
+### Formas para probras las funcionalidades.
+Se agrega colección de Postmas de cada una de los servicios para validar las funcionalidades.
+
+
 ## Requisitos
 
 *   Docker
