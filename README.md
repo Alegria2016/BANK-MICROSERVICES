@@ -45,7 +45,7 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 
 ### Modelo Entidad Relación (ERD)
 
-Aunque los proyectos estan separados y no tiene una recion directa entre las tablas los dos proyectos se muestra a continuacion la relacion logica da la tabla clientes del proyecto client-service y las dos tablas cuentas y movimientos del servicio account-service.
+Aunque los proyectos estan separados y no tiene una relación directa entre las tablas de los dos proyectos, se muestra a continuacion la relacion lógica da la tabla clientes del proyecto client-service y las dos tablas cuentas y movimientos del servicio account-service, la cual consiste en que un cliente puede tener muchas cuentas y una cuenta puede tener muchos movimientos.
 
 <img width="839" height="449" alt="image" src="https://github.com/user-attachments/assets/a4d67f32-9327-4c17-ae14-b2fb23cbcf71" />
 
