@@ -1,133 +1,88 @@
-# Project Name
+# Microservicios Bancarios
 
-## Overview
+Este proyecto consiste en una arquitectura de microservicios para un sistema bancario, que incluye los servicios de `account-service` y `client-service`, junto con sus respectivas bases de datos MySQL.
 
-A brief description of the project and its purpose. Explain what problem it solves or what functionality it provides.
+## Descripción General
 
-## Services
+El objetivo de este proyecto es demostrar una implementación de microservicios utilizando Docker y Docker Compose para facilitar el despliegue y la gestión de los servicios.
+
+## Servicios
 
 ### Account Service
 
-#### Description
-
-A detailed explanation of the account service. Include its responsibilities and how it interacts with other services.
-
-#### Tech Stack
-
-*   Language: [e.g., Java, Python, Node.js]
-*   Framework: [e.g., Spring Boot, Django, Express.js]
-*   Database: [e.g., PostgreSQL, MongoDB, MySQL]
-*   Other Libraries: [List any significant libraries]
-
-#### Setup Instructions
-
-Detailed steps on how to set up and run the account service.
-
-1.  Clone the repository:
-    ```bash
-    git clone <repository-url>
-    cd account-service
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install  # Example for Node.js
-    ```
-3.  Configure environment variables:
-
-    *   Create a `.env` file.
-    *   Add the following variables:
-
-        ```
-        DATABASE_URL=...
-        API_KEY=...
-        ```
-4.  Run the service:
-    ```bash
-    npm start  # Example for Node.js
-    ```
-
-#### API Endpoints
-
-List the main API endpoints with descriptions.
-
-*   `GET /accounts`: Get all accounts
-*   `POST /accounts`: Create a new account
-*   `GET /accounts/{id}`: Get an account by ID
-*   `PUT /accounts/{id}`: Update an account
-*   `DELETE /accounts/{id}`: Delete an account
-
-#### Dependencies
-
-*   Database: [e.g., PostgreSQL]
-*   Other Services: [List any other services it depends on]
+*   **Descripción:** Servicio encargado de la gestión de cuentas bancarias. Permite crear, actualizar, eliminar y consultar cuentas.
+*   **Tecnologías:**
+    *   Java
+    *   Spring Boot
+    *   MySQL
+    *   Maven
+    *   Docker
+*   **Puerto:** 8082 (ver `health-check.sh`)
+*   **Dependencias:**
+    *   MySQL (`mysql-account`)
 
 ### Client Service
 
-#### Description
+*   **Descripción:** Servicio encargado de la gestión de clientes. Permite registrar, actualizar y consultar información de los clientes.
+*   **Tecnologías:**
+    *   Java
+    *   Spring Boot
+    *   MySQL
+    *   Maven
+    *   Docker
+*   **Puerto:** 8081 (ver `health-check.sh`)
+*   **Dependencias:**
+    *   MySQL (`mysql-client`)
 
-A detailed explanation of the client service. Include its responsibilities and how it interacts with other services.
+## Requisitos
 
-#### Tech Stack
+*   Docker
+*   Docker Compose
 
-*   Language: [e.g., Java, Python, Node.js]
-*   Framework: [e.g., Spring Boot, Django, Express.js]
-*   Database: [e.g., PostgreSQL, MongoDB, MySQL]
-*   Other Libraries: [List any significant libraries]
+## Despliegue
 
-#### Setup Instructions
+El despliegue se realiza mediante Docker Compose. Siga estos pasos:
 
-Detailed steps on how to set up and run the client service.
+1.  Clonar el repositorio:
 
-1.  Clone the repository:
     ```bash
-    git clone <repository-url>
-    cd client-service
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install  # Example for Node.js
-    ```
-3.  Configure environment variables:
-
-    *   Create a `.env` file.
-    *   Add the following variables:
-
-        ```
-        DATABASE_URL=...
-        API_KEY=...
-        ```
-4.  Run the service:
-    ```bash
-    npm start  # Example for Node.js
+    git clone <URL_DEL_REPOSITORIO>
+    cd bank-microservices
     ```
 
-#### API Endpoints
+2.  Ejecutar el script de despliegue:
 
-List the main API endpoints with descriptions.
+    ```bash
+    ./deploy.sh
+    ```
 
-*   `GET /clients`: Get all clients
-*   `POST /clients`: Create a new client
-*   `GET /clients/{id}`: Get a client by ID
-*   `PUT /clients/{id}`: Update a client
-*   `DELETE /clients/{id}`: Delete a client
+    El script `deploy.sh` realiza las siguientes acciones:
 
-#### Dependencies
+    *   Detiene y elimina contenedores y volúmenes existentes.
+    *   Construye las imágenes de Docker para `mysql-account`, `mysql-client`, `account-service` y `client-service`.
+    *   Inicia los contenedores de las bases de datos MySQL.
+    *   Espera a que las bases de datos estén listas.
+    *   Inicia los servicios `account-service` y `client-service`.
+    *   Verifica el estado final de los servicios.
 
-*   Database: [e.g., PostgreSQL]
-*   Other Services: [List any other services it depends on, like Account Service]
+## Configuración
 
-## Configuration
+La configuración de las bases de datos MySQL se encuentra en el archivo [docker-compose.yml](docker-compose.yml). Las variables de entorno para la conexión a las bases de datos se definen en este mismo archivo.
 
-Explain any configuration options available for each service.
+*   **mysql-account:**
+    *   Puerto: 3307
+    *   Base de datos: account\_db
+    *   Usuario: app\_user
+    *   Contraseña: userpassword
+*   **mysql-client:**
+    *   Puerto: 3308
+    *   Base de datos: client\_db
+    *   Usuario: app\_user
+    *   Contraseña: userpassword
 
-## Usage
+## Verificación de Salud
 
-Provide examples of how to use the services, including code snippets if necessary.
+El script [health-check.sh](health-check.sh) verifica la salud de los servicios.  Ejecútelo para confirmar que todos los servicios están en funcionamiento:
 
-## Contributing
-
-Explain how others can contribute to the project.  Include guidelines for submitting pull requests.
-
-## License
-
-Specify the license under which the project is released.  (e.g., MIT, Apache 2.0)
+```bash
+./health-check.sh

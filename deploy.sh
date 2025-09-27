@@ -51,5 +51,5 @@ docker compose logs --tail=10
 
 echo ""
 echo "✅ Despliegue completado. Verificando salud de los servicios..."
-curl -s http://localhost:8081 || echo "❌ account-service no responde"
-curl -s http://localhost:8082 || echo "❌ client-service no responde"
+curl -s http://localhost:8081/api/swagger-ui/index.html || echo "❌ account-service no responde"
+curl -s http://localhost:8082/api/swagger-ui/index.html || echo "❌ client-service no responde"
