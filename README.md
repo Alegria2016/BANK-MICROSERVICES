@@ -55,7 +55,8 @@ El objetivo de este proyecto es demostrar una implementación de microservicios 
 
 ### F3:
    
-    *  Registro de movimientos: Al realizar un movimiento el cual no cuente con saldo, debe alertar mediante el siguiente mensaje "Saldo no disponible"
+    *  Registro de movimientos: Al realizar un movimiento el cual no cuente con saldo, debe alertar mediante el siguiente 
+	   mensaje "Saldo no disponible"
 	*  Defina segun su expertise, la mejor manera de capturar y mostrar el error.
 
 
