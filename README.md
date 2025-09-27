@@ -4,7 +4,7 @@ Este proyecto consiste en una arquitectura de microservicios para un sistema ban
 
 ## Descripción General
 
-El objetivo de este proyecto es demostrar una implementación de microservicios utilizando Docker y Docker Compose para facilitar el despliegue y la gestión de los servicios.
+El objetivo de este proyecto es demostrar una implementación de microservicios utilizando Docker y Compose para facilitar el despliegue y la gestión de los servicios.
 
 ## Servicios
 
