@@ -95,7 +95,12 @@ Aunque los proyectos están separados y no tiene una relación directa entre las
 
 
 ### Formas para probras las funcionalidades.
-Se agrega colección de Postmas de cada una de los servicios para validar las funcionalidades.
+Se agrega colección de Postmas (bank-microservices.postman_collection.json) de cada una de los servicios para validar las funcionalidades.
+Adiconal a esta opción tambien se puede hacer en la pagina de inicion (client-service: http://localhost:8082/api/swagger-ui/index.html y account-service:http://localhost:8081/api/swagger-ui/index.html) una vez carga la apliación dierectamente con al documentacion de OpenApi:
+
+<img width="1339" height="679" alt="image" src="https://github.com/user-attachments/assets/7eeba9a6-fa34-44c7-b7aa-43af0885fccd" />
+
+
 
 
 ## Requisitos
