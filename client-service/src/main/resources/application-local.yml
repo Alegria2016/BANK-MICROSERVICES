@@ -7,11 +7,11 @@ spring:
   application:
     name: client-service
   profiles:
-    active: default
+    active: local
   datasource:
-    url: jdbc:mysql://mysql-client:3306/client_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/client_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: rootpassword
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -22,15 +22,14 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true  # ← ACTIVADO para desarrollo local
     properties:
       hibernate:
         format_sql: true
         jdbc:
           batch_size: 20
-          
   rabbitmq:
-    host: rabbitmq  
+    host: localhost
     port: 5672
     username: guest
     password: guest
@@ -55,19 +54,29 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,env,beans
   endpoint:
     health:
       show-details: always
       show-components: always
+    env:
+      enabled: true
+    beans:
+      enabled: true
 
 logging:
   level:
-    com.bank.client_service: INFO
+    com.fal.client_service: DEBUG  # ← DEBUG para desarrollo
     org.springframework: INFO
-    org.hibernate: WARN
-    org.springdoc: DEBUG
+    org.hibernate: DEBUG  # ← DEBUG para ver SQL
+    org.springdoc: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   file:
-    name: /var/log/client-service/app.log
+    name: ./logs/client-service-app.log  # ← Ruta local
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Configuración específica para desarrollo local
+debug: true

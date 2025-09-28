@@ -73,7 +73,7 @@ class CuentaServiceImplTest {
         updateRequest = new UpdateCuentaRequest();
         updateRequest.setNumeroCuenta("1234567890");
         updateRequest.setTipoCuenta("CORRIENTE");
-        updateRequest.setSaldoInicial(new BigDecimal("2000.00"));
+        updateRequest.setSaldoInicial(new BigDecimal("0.00"));
         updateRequest.setEstado(true);
     }
 

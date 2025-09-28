@@ -4,12 +4,11 @@ server:
     context-path: /api
 
 spring:
-  application:
-    name: account-service
-  profiles:
-    active: default
+  config:
+    activate:
+      on-profile: docker
   datasource:
-    url: jdbc:mysql://localhost:3306/account_db
+    url: jdbc:mysql://mysql-account:3306/account_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: app_user
     password: userpassword
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -19,6 +18,7 @@ spring:
       idle-timeout: 300000
       connection-timeout: 20000
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
     show-sql: false
@@ -27,8 +27,10 @@ spring:
         format_sql: true
         jdbc:
           batch_size: 20
+
+
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
@@ -42,54 +44,27 @@ spring:
       simple:
         retry:
           enabled: true
+          initial-interval: 2000
           max-attempts: 3
-        auto-startup: true
 
 app:
-  events:
-    enabled: true
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    connection-timeout: 10000
-    template:
-      retry:
-        enabled: true
-        initial-interval: 2000
-        max-attempts: 3
-    exchange:
-      cliente-events: "cliente.events"
-    queue:
-      cliente-creado: "cliente.creado.queue"
-    routing-key:
-      cliente-creado: "cliente.creado"
-  cuenta:
-    defecto:
-      saldo-inicial: 50.00
-      tipo: AHORROS
-      habilitada: true
-  security:
-    jwt:
-      secret: "account-service-secret-key"
+  integration:
+    account-service:
+      url: http://account-service:8081
+      timeout: 10000
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,env
   endpoint:
     health:
       show-details: always
-      show-components: always
 
 logging:
   level:
-    com.bank.account_service: INFO
-    org.springframework: INFO
-    org.hibernate: WARN
-  file:
-    name: /var/log/account-service/app.log
+    com.bank.account_service: DEBUG
+    org.springframework.amqp: INFO
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [account-service] [%thread] %-5level %logger{36} - %msg%n"

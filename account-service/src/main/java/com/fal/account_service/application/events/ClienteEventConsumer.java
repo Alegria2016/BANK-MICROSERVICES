@@ -50,7 +50,7 @@ public class ClienteEventConsumer {
             request.setClienteId(event.getClienteId());
             request.setNumeroCuenta(numeroCuenta);
             request.setTipoCuenta("AHORROS");
-            request.setSaldoInicial(new BigDecimal("2000.00"));
+            request.setSaldoInicial(new BigDecimal("0.00"));
             cuentaService.crearCuenta(request);
 
             // Usar cuentaService para crear la cuenta
