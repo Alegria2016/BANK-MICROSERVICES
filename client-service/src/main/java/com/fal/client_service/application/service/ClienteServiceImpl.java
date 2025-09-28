@@ -26,13 +26,13 @@ public class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
 
-    @Autowired
-    private ClienteEventPublisher eventPublisher;
+   private final ClienteEventPublisher eventPublisher;
 
     @Autowired
-    public ClienteServiceImpl(ClienteRepository clienteRepository, ClienteMapper clienteMapper) {
+    public ClienteServiceImpl(ClienteRepository clienteRepository, ClienteMapper clienteMapper, ClienteEventPublisher eventPublisher) {
         this.clienteRepository = clienteRepository;
         this.clienteMapper = clienteMapper;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override

@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://mysql-client:3306/client_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: password
+    password: rootpassword
     hikari:
       maximum-pool-size: 15
       connection-timeout: 30000
@@ -16,6 +16,17 @@ spring:
       retry:
         max-attempts: 5
         initial-interval: 3000
+    listener:
+      simple:
+        retry:
+          max-attempts: 5
+        default-requeue-rejected: false
+
+app:
+  integration:
+    client-service:
+      url: http://client-service:8082
+      timeout: 10000
 
 management:
   endpoints:

@@ -69,7 +69,7 @@ class CuentaServiceImplTest {
         createRequest.setSaldoInicial(new BigDecimal("1000.00"));
         createRequest.setClienteId("CLI-123");
 
-        
+
         updateRequest = new UpdateCuentaRequest();
         updateRequest.setNumeroCuenta("1234567890");
         updateRequest.setTipoCuenta("CORRIENTE");

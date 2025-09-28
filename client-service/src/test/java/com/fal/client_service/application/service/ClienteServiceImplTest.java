@@ -5,15 +5,18 @@ import com.fal.client_service.application.dto.CreateClienteRequest;
 import com.fal.client_service.application.dto.UpdateClienteRequest;
 import com.fal.client_service.application.mapper.ClienteMapper;
 import com.fal.client_service.domain.model.Cliente;
+import com.fal.client_service.domain.service.events.ClienteCreadoEvent;
+import com.fal.client_service.infrastructure.messaging.ClienteEventPublisher;
 import com.fal.client_service.infrastructure.persistence.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +34,9 @@ class ClienteServiceImplTest {
     @Mock
     private ClienteMapper clienteMapper;
 
+    @Mock
+    private ClienteEventPublisher eventPublisher;
+
     @InjectMocks
     private ClienteServiceImpl clienteService;
 
@@ -41,6 +47,7 @@ class ClienteServiceImplTest {
 
     @BeforeEach
     void setUp() {
+        clienteService = new ClienteServiceImpl(clienteRepository, clienteMapper, eventPublisher);
         // Configurar entidad Cliente
         cliente = new Cliente();
         cliente.setId(1L);
@@ -53,7 +60,6 @@ class ClienteServiceImplTest {
         cliente.setPassword("password123");
         cliente.setClienteId("CLI-ABC123");
         cliente.setEstado(true);
-        cliente.setFechaCreacion(LocalDateTime.now());
 
         // Configurar ClienteDTO
         clienteDTO = new ClienteDTO();
@@ -66,7 +72,6 @@ class ClienteServiceImplTest {
         clienteDTO.setTelefono("098254785");
         clienteDTO.setClienteId("CLI-ABC123");
         clienteDTO.setEstado(true);
-        clienteDTO.setFechaCreacion(LocalDateTime.now());
 
         // Configurar CreateClienteRequest
         createRequest = new CreateClienteRequest();
@@ -111,6 +116,7 @@ class ClienteServiceImplTest {
         verify(clienteMapper, times(1)).toEntity(any(CreateClienteRequest.class));
         verify(clienteRepository, times(1)).save(any(Cliente.class));
         verify(clienteMapper, times(1)).toDTO(any(Cliente.class));
+        verify(eventPublisher, times(1)).publicarClienteCreado(any(ClienteCreadoEvent.class));
     }
 
     @Test
@@ -119,14 +125,20 @@ class ClienteServiceImplTest {
         when(clienteRepository.existsByIdentificacion(anyString())).thenReturn(true);
 
         // When & Then
-        assertThrows(RuntimeException.class, () -> {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             clienteService.crearCliente(createRequest);
         });
+
+        assertEquals("Ya existe un cliente con la identificación: " + createRequest.getIdentificacion(),
+                exception.getMessage());
 
         verify(clienteRepository, times(1)).existsByIdentificacion(anyString());
         verify(clienteMapper, never()).toEntity(any(CreateClienteRequest.class));
         verify(clienteRepository, never()).save(any(Cliente.class));
+        verify(eventPublisher, never()).publicarClienteCreado(any(ClienteCreadoEvent.class));
     }
+
+
 
     @Test
     void testObtenerClientePorIdExistente() {
@@ -159,85 +171,7 @@ class ClienteServiceImplTest {
     }
 
     @Test
-    void testEliminarClienteExitoso() {
-        // Given
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
-        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
-
-        // When
-        clienteService.eliminarCliente(1L);
-
-        // Then
-        assertFalse(cliente.getEstado()); // Verificar eliminación lógica
-        verify(clienteRepository, times(1)).findById(1L);
-        verify(clienteRepository, times(1)).save(cliente);
-    }
-
-    @Test
-    void testEliminarClienteNoExistente() {
-        // Given
-        when(clienteRepository.findById(999L)).thenReturn(Optional.empty());
-
-        // When & Then
-        assertThrows(RuntimeException.class, () -> {
-            clienteService.eliminarCliente(999L);
-        });
-
-        verify(clienteRepository, times(1)).findById(999L);
-        verify(clienteRepository, never()).save(any(Cliente.class));
-    }
-
-    @Test
-    void testActualizarClienteExitoso() {
-        // Given
-        Cliente clienteActualizado = new Cliente();
-        clienteActualizado.setId(1L);
-        clienteActualizado.setNombre("Jose Lema Actualizado");
-        clienteActualizado.setIdentificacion("1234567890");
-        clienteActualizado.setEstado(true);
-
-        ClienteDTO clienteActualizadoDTO = new ClienteDTO();
-        clienteActualizadoDTO.setId(1L);
-        clienteActualizadoDTO.setNombre("Jose Lema Actualizado");
-
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
-        when(clienteRepository.existsByIdentificacion(anyString())).thenReturn(false);
-        when(clienteRepository.save(any(Cliente.class))).thenReturn(clienteActualizado);
-        when(clienteMapper.toDTO(any(Cliente.class))).thenReturn(clienteActualizadoDTO);
-
-        // When
-        ClienteDTO resultado = clienteService.actualizarCliente(1L, updateRequest);
-
-        // Then
-        assertNotNull(resultado);
-        assertEquals("Jose Lema Actualizado", resultado.getNombre());
-
-        verify(clienteRepository, times(1)).findById(1L);
-        verify(clienteRepository, times(1)).existsByIdentificacion(anyString());
-        verify(clienteMapper, times(1)).updateEntityFromRequest(any(UpdateClienteRequest.class), any(Cliente.class));
-        verify(clienteRepository, times(1)).save(any(Cliente.class));
-        verify(clienteMapper, times(1)).toDTO(any(Cliente.class));
-    }
-
-    @Test
-    void testActualizarClienteConIdentificacionExistente() {
-        // Given
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
-        when(clienteRepository.existsByIdentificacion(anyString())).thenReturn(true);
-
-        // When & Then
-        assertThrows(RuntimeException.class, () -> {
-            clienteService.actualizarCliente(1L, updateRequest);
-        });
-
-        verify(clienteRepository, times(1)).findById(1L);
-        verify(clienteRepository, times(1)).existsByIdentificacion(anyString());
-        verify(clienteMapper, never()).updateEntityFromRequest(any(UpdateClienteRequest.class), any(Cliente.class));
-        verify(clienteRepository, never()).save(any(Cliente.class));
-    }
-
-    @Test
-    void testObtenerClientePorIdentificacion() {
+    void testObtenerClientePorIdentificacionExistente() {
         // Given
         when(clienteRepository.findByIdentificacion("1234567890")).thenReturn(Optional.of(cliente));
         when(clienteMapper.toDTO(any(Cliente.class))).thenReturn(clienteDTO);
@@ -250,6 +184,20 @@ class ClienteServiceImplTest {
         assertEquals("1234567890", resultado.get().getIdentificacion());
         verify(clienteRepository, times(1)).findByIdentificacion("1234567890");
         verify(clienteMapper, times(1)).toDTO(any(Cliente.class));
+    }
+
+    @Test
+    void testObtenerClientePorIdentificacionNoExistente() {
+        // Given
+        when(clienteRepository.findByIdentificacion("9999999999")).thenReturn(Optional.empty());
+
+        // When
+        Optional<ClienteDTO> resultado = clienteService.obtenerClientePorIdentificacion("9999999999");
+
+        // Then
+        assertFalse(resultado.isPresent());
+        verify(clienteRepository, times(1)).findByIdentificacion("9999999999");
+        verify(clienteMapper, never()).toDTO(any(Cliente.class));
     }
 
     @Test
@@ -271,6 +219,103 @@ class ClienteServiceImplTest {
     }
 
     @Test
+    void testObtenerTodosLosClientesCuandoNoHayClientes() {
+        // Given
+        when(clienteRepository.findAll()).thenReturn(List.of());
+
+        // When
+        List<ClienteDTO> resultados = clienteService.obtenerTodosLosClientes();
+
+        // Then
+        assertNotNull(resultados);
+        assertTrue(resultados.isEmpty());
+        verify(clienteRepository, times(1)).findAll();
+        verify(clienteMapper, never()).toDTO(any(Cliente.class));
+    }
+
+
+
+    @Test
+    void testActualizarClienteConMismaIdentificacion() {
+        // Given
+        updateRequest.setIdentificacion("1234567890"); // Misma identificación
+        Cliente clienteActualizado = new Cliente();
+        clienteActualizado.setId(1L);
+        clienteActualizado.setNombre("Jose Lema Actualizado");
+
+        ClienteDTO clienteActualizadoDTO = new ClienteDTO();
+        clienteActualizadoDTO.setId(1L);
+        clienteActualizadoDTO.setNombre("Jose Lema Actualizado");
+
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+        // No se verifica existsByIdentificacion cuando es la misma identificación
+        doNothing().when(clienteMapper).updateEntityFromRequest(any(UpdateClienteRequest.class), any(Cliente.class));
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(clienteActualizado);
+        when(clienteMapper.toDTO(any(Cliente.class))).thenReturn(clienteActualizadoDTO);
+
+        // When
+        ClienteDTO resultado = clienteService.actualizarCliente(1L, updateRequest);
+
+        // Then
+        assertNotNull(resultado);
+        assertEquals("Jose Lema Actualizado", resultado.getNombre());
+
+        verify(clienteRepository, times(1)).findById(1L);
+        verify(clienteRepository, never()).existsByIdentificacion(anyString());
+        verify(clienteMapper, times(1)).updateEntityFromRequest(any(UpdateClienteRequest.class), any(Cliente.class));
+        verify(clienteRepository, times(1)).save(any(Cliente.class));
+        verify(clienteMapper, times(1)).toDTO(any(Cliente.class));
+    }
+
+    @Test
+    void testActualizarClienteNoExistente() {
+        // Given
+        when(clienteRepository.findById(999L)).thenReturn(Optional.empty());
+
+        // When & Then
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            clienteService.actualizarCliente(999L, updateRequest);
+        });
+
+        assertEquals("Cliente no encontrado con ID: 999", exception.getMessage());
+
+        verify(clienteRepository, times(1)).findById(999L);
+        verify(clienteRepository, never()).existsByIdentificacion(anyString());
+        verify(clienteMapper, never()).updateEntityFromRequest(any(UpdateClienteRequest.class), any(Cliente.class));
+        verify(clienteRepository, never()).save(any(Cliente.class));
+    }
+
+    @Test
+    void testEliminarClienteExitoso() {
+        // Given
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
+
+        // When
+        clienteService.eliminarCliente(1L);
+
+        // Then
+        assertFalse(cliente.getEstado(), "El cliente debería estar inactivo después de eliminar");
+        verify(clienteRepository, times(1)).findById(1L);
+        verify(clienteRepository, times(1)).save(cliente);
+    }
+
+    @Test
+    void testEliminarClienteNoExistente() {
+        // Given
+        when(clienteRepository.findById(999L)).thenReturn(Optional.empty());
+
+        // When & Then
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            clienteService.eliminarCliente(999L);
+        });
+
+        assertEquals("Cliente no encontrado con ID: 999", exception.getMessage());
+        verify(clienteRepository, times(1)).findById(999L);
+        verify(clienteRepository, never()).save(any(Cliente.class));
+    }
+
+    @Test
     void testExisteClientePorIdentificacion() {
         // Given
         when(clienteRepository.existsByIdentificacion("1234567890")).thenReturn(true);
@@ -284,22 +329,46 @@ class ClienteServiceImplTest {
     }
 
     @Test
-    void testActivarCliente() {
+    void testNoExisteClientePorIdentificacion() {
         // Given
-        cliente.setEstado(false); // Cliente inactivo
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
-        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
+        when(clienteRepository.existsByIdentificacion("9999999999")).thenReturn(false);
+
+        // When
+        boolean existe = clienteService.existeClientePorIdentificacion("9999999999");
+
+        // Then
+        assertFalse(existe);
+        verify(clienteRepository, times(1)).existsByIdentificacion("9999999999");
+    }
+
+    @Test
+    void testObtenerClientePorClienteIdExistente() {
+        // Given
+        when(clienteRepository.findByClienteId("CLI-ABC123")).thenReturn(Optional.of(cliente));
         when(clienteMapper.toDTO(any(Cliente.class))).thenReturn(clienteDTO);
 
         // When
-        ClienteDTO resultado = clienteService.activarCliente(1L);
+        Optional<ClienteDTO> resultado = clienteService.obtenerClientePorClienteId("CLI-ABC123");
 
         // Then
-        assertNotNull(resultado);
-        assertTrue(cliente.getEstado()); // Verificar que se activó
-        verify(clienteRepository, times(1)).findById(1L);
-        verify(clienteRepository, times(1)).save(cliente);
+        assertTrue(resultado.isPresent());
+        assertEquals("CLI-ABC123", resultado.get().getClienteId());
+        verify(clienteRepository, times(1)).findByClienteId("CLI-ABC123");
         verify(clienteMapper, times(1)).toDTO(any(Cliente.class));
+    }
+
+    @Test
+    void testObtenerClientePorClienteIdNoExistente() {
+        // Given
+        when(clienteRepository.findByClienteId("CLI-NOEXISTE")).thenReturn(Optional.empty());
+
+        // When
+        Optional<ClienteDTO> resultado = clienteService.obtenerClientePorClienteId("CLI-NOEXISTE");
+
+        // Then
+        assertFalse(resultado.isPresent());
+        verify(clienteRepository, times(1)).findByClienteId("CLI-NOEXISTE");
+        verify(clienteMapper, never()).toDTO(any(Cliente.class));
     }
 
     @Test
@@ -319,4 +388,56 @@ class ClienteServiceImplTest {
         verify(clienteRepository, times(1)).findByEstadoTrue();
         verify(clienteMapper, times(1)).toDTO(any(Cliente.class));
     }
+
+    @Test
+    void testObtenerClientesActivosCuandoNoHayActivos() {
+        // Given
+        when(clienteRepository.findByEstadoTrue()).thenReturn(List.of());
+
+        // When
+        List<ClienteDTO> resultados = clienteService.obtenerClientesActivos();
+
+        // Then
+        assertNotNull(resultados);
+        assertTrue(resultados.isEmpty());
+        verify(clienteRepository, times(1)).findByEstadoTrue();
+        verify(clienteMapper, never()).toDTO(any(Cliente.class));
+    }
+
+    @Test
+    void testActivarClienteExitoso() {
+        // Given
+        cliente.setEstado(false); // Cliente inactivo
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
+        when(clienteMapper.toDTO(any(Cliente.class))).thenReturn(clienteDTO);
+
+        // When
+        ClienteDTO resultado = clienteService.activarCliente(1L);
+
+        // Then
+        assertNotNull(resultado);
+        assertTrue(cliente.getEstado(), "El cliente debería estar activo después de activar");
+        verify(clienteRepository, times(1)).findById(1L);
+        verify(clienteRepository, times(1)).save(cliente);
+        verify(clienteMapper, times(1)).toDTO(any(Cliente.class));
+    }
+
+    @Test
+    void testActivarClienteNoExistente() {
+        // Given
+        when(clienteRepository.findById(999L)).thenReturn(Optional.empty());
+
+        // When & Then
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            clienteService.activarCliente(999L);
+        });
+
+        assertEquals("Cliente no encontrado con ID: 999", exception.getMessage());
+        verify(clienteRepository, times(1)).findById(999L);
+        verify(clienteRepository, never()).save(any(Cliente.class));
+        verify(clienteMapper, never()).toDTO(any(Cliente.class));
+    }
+
+
 }
