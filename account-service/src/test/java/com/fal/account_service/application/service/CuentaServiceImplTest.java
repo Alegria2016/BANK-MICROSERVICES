@@ -42,7 +42,7 @@ class CuentaServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // Configurar entidad Cuenta
+
         cuenta = new Cuenta();
         cuenta.setId(1L);
         cuenta.setNumeroCuenta("1234567890");
@@ -52,7 +52,7 @@ class CuentaServiceImplTest {
         cuenta.setClienteId("CLI-123");
         cuenta.setEstado(true);
 
-        // Configurar CuentaDTO
+
         cuentaDTO = new CuentaDTO();
         cuentaDTO.setId(1L);
         cuentaDTO.setNumeroCuenta("1234567890");
@@ -62,14 +62,14 @@ class CuentaServiceImplTest {
         cuentaDTO.setClienteId("CLI-123");
         cuentaDTO.setEstado(true);
 
-        // Configurar CreateCuentaRequest
+
         createRequest = new CreateCuentaRequest();
         createRequest.setNumeroCuenta("1234567890");
         createRequest.setTipoCuenta("AHORROS");
         createRequest.setSaldoInicial(new BigDecimal("1000.00"));
         createRequest.setClienteId("CLI-123");
 
-        // Configurar UpdateCuentaRequest
+        
         updateRequest = new UpdateCuentaRequest();
         updateRequest.setNumeroCuenta("1234567890");
         updateRequest.setTipoCuenta("CORRIENTE");
