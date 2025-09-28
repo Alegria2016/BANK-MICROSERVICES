@@ -10,8 +10,8 @@ spring:
     active: default
   datasource:
     url: jdbc:mysql://localhost:3306/account_db
-    username: root
-    password:
+    username: app_user
+    password: userpassword
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
