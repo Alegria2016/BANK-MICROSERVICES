@@ -151,6 +151,7 @@ http://localhost:8081/api/swagger-ui/index.html
 
 
 
+
 ## Configuración
 
 La configuración de las bases de datos MySQL se encuentra en el archivo [docker-compose.yml](docker-compose.yml). Las variables de entorno para la conexión a las bases de datos se definen en este mismo archivo.
