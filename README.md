@@ -114,6 +114,8 @@ Se agrega colección de Postmas (bank-microservices.postman_collection.json) de 
 
 El despliegue se realiza mediante Docker Compose. Siga estos pasos:
 
+Asegurarse de tener Docker corriendo en la maquina donde se realizará el despliegue.
+
 1.  Clonar el repositorio:
 
     ```bash
@@ -122,6 +124,7 @@ El despliegue se realiza mediante Docker Compose. Siga estos pasos:
     ```
 
 2.  Ejecutar el script de despliegue:
+    Abrir consola de Powershell ubicarse en la raíz del proyecto bank-microservices y ejecutar el siguiente comando para realizar el despliegue.
 
     ```bash
     ./deploy.sh
@@ -135,6 +138,16 @@ El despliegue se realiza mediante Docker Compose. Siga estos pasos:
     *   Espera a que las bases de datos estén listas.
     *   Inicia los servicios `account-service` y `client-service`.
     *   Verifica el estado final de los servicios.
+En este punto estar atento a la consola para ver cada proceso, una ver termina el despliegue muestra el estado de los servicios ver imagen
+<img width="516" height="144" alt="image" src="https://github.com/user-attachments/assets/078db1e0-d5f7-4d6f-9b66-7a2b0f6ada9c" />
+<img width="747" height="246" alt="image" src="https://github.com/user-attachments/assets/c62a7248-c08a-4535-a5e8-974198f12d74" />
+
+Una vez se vea lo que muestra la imagen anterior ya se puede acceder a la aplicación para ver la documentación y probar.
+URLs de los servicios corriendo:
+http://localhost:8082/api/swagger-ui/index.html
+http://localhost:8081/api/swagger-ui/index.html
+
+
 
 ## Configuración
 
