@@ -143,6 +143,7 @@ En este punto estar atento a la consola para ver cada proceso, una ver termina e
 <img width="747" height="246" alt="image" src="https://github.com/user-attachments/assets/c62a7248-c08a-4535-a5e8-974198f12d74" />
 
 Una vez se vea lo que muestra la imagen anterior ya se puede acceder a la aplicación para ver la documentación y probar.
+
 URLs de los servicios corriendo:
 http://localhost:8082/api/swagger-ui/index.html
 http://localhost:8081/api/swagger-ui/index.html
